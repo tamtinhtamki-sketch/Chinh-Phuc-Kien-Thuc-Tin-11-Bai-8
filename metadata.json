@@ -1,0 +1,6 @@
+{
+  "name": "Đấu Trường Tin Học 11 - Bài 8: Thư Điện Tử & Mạng Xã Hội",
+  "description": "Trò chơi học tập và thuyết trình tương tác Bài 8 Tin học 11 (KNTT) với Infographic kiến thức, 20 câu trắc nghiệm A-B-C-D, 4 câu Đúng/Sai, 4 câu tự luận và hệ thống thi đua 4 Tổ.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

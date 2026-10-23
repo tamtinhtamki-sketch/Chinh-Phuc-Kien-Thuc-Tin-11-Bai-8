@@ -1,0 +1,986 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Đấu Trường Tin Học 11 - Bài 8: Thư Điện Tử & Mạng Xã Hội</title>
+  <style>
+    /* CSS TOÀN BỘ ĐÓNG GÓI TẠI ĐÂY - KHÔNG CẦN LINK NGOÀI */
+    :root {
+      --bg: #090d16;
+      --card-bg: #111827;
+      --border: #1f2937;
+      --text: #f3f4f6;
+      --text-muted: #9ca3af;
+      --blue: #3b82f6;
+      --emerald: #10b981;
+      --purple: #8b5cf6;
+      --amber: #f59e0b;
+      --rose: #ef4444;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif; }
+    body { background-color: var(--bg); color: var(--text); min-height: 100vh; padding: 16px; line-height: 1.5; }
+    .container { max-width: 1200px; margin: 0 auto; display: flex; flex-direction: column; gap: 20px; }
+    
+    /* Header */
+    header { background: linear-gradient(135deg, #1e1b4b 0%, #172554 50%, #0f172a 100%); border: 1px solid #312e81; border-radius: 16px; padding: 24px; display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 16px; box-shadow: 0 10px 25px -5px rgba(0,0,0,0.5); }
+    .badge { display: inline-flex; align-items: center; gap: 6px; padding: 4px 12px; border-radius: 9999px; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; background: rgba(59, 130, 246, 0.2); color: #93c5fd; border: 1px solid rgba(59, 130, 246, 0.4); }
+    h1 { font-size: clamp(1.2rem, 3vw, 1.8rem); font-weight: 900; margin: 8px 0; color: #fff; line-height: 1.25; }
+    p.desc { font-size: 0.9rem; color: #cbd5e1; max-width: 700px; }
+    
+    .nav-tabs { display: flex; flex-wrap: wrap; gap: 8px; background: rgba(17, 24, 39, 0.8); padding: 8px; border-radius: 12px; border: 1px solid var(--border); }
+    .nav-btn { background: transparent; border: none; color: var(--text-muted); padding: 8px 16px; border-radius: 8px; font-weight: 700; font-size: 0.85rem; cursor: pointer; transition: all 0.2s; }
+    .nav-btn.active { background: var(--blue); color: #fff; box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3); }
+    .nav-btn:hover:not(.active) { color: #fff; background: rgba(255,255,255,0.05); }
+
+    /* Scoreboard */
+    .scoreboard { background: var(--card-bg); border: 1px solid var(--border); border-radius: 16px; padding: 16px; box-shadow: 0 8px 20px rgba(0,0,0,0.4); }
+    .scoreboard-title { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; padding-bottom: 10px; border-bottom: 1px solid var(--border); font-size: 0.9rem; font-weight: 800; }
+    .teams-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; }
+    .team-card { background: rgba(15, 23, 42, 0.6); border: 1px solid var(--border); border-radius: 12px; padding: 12px; display: flex; flex-direction: column; justify-content: space-between; position: relative; transition: all 0.2s; }
+    .team-card.active { border-color: var(--blue); box-shadow: 0 0 15px rgba(59, 130, 246, 0.3); background: rgba(30, 41, 59, 0.8); }
+    .team-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+    .team-name { font-weight: 700; font-size: 0.85rem; display: flex; align-items: center; gap: 6px; }
+    .team-score { font-size: 1.8rem; font-weight: 900; text-align: center; margin: 8px 0; color: #fff; }
+    .btn-group { display: flex; gap: 4px; justify-content: center; }
+    .btn-sm { padding: 4px 8px; font-size: 0.75rem; font-weight: 700; border-radius: 6px; border: 1px solid var(--border); background: #1f2937; color: #d1d5db; cursor: pointer; }
+    .btn-sm:hover { background: #374151; color: #fff; }
+    .btn-sm.primary { background: var(--blue); color: #fff; border-color: var(--blue); }
+
+    /* Quiz card */
+    .quiz-card { background: var(--card-bg); border: 1px solid var(--border); border-radius: 16px; padding: 24px; box-shadow: 0 10px 25px rgba(0,0,0,0.4); display: flex; flex-direction: column; gap: 20px; }
+    .quiz-header { display: flex; justify-content: space-between; align-items: center; font-size: 0.85rem; color: var(--text-muted); }
+    .question-title { font-size: clamp(1.05rem, 2.5vw, 1.35rem); font-weight: 800; line-height: 1.4; color: #fff; }
+    .options-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 12px; }
+    .opt-btn { background: rgba(15, 23, 42, 0.7); border: 1px solid var(--border); border-radius: 12px; padding: 14px; text-align: left; display: flex; align-items: flex-start; gap: 12px; cursor: pointer; color: var(--text); font-size: 0.92rem; transition: all 0.15s; font-weight: 500; }
+    .opt-btn:hover { background: #1e293b; border-color: #475569; transform: translateY(-1px); }
+    .opt-btn.correct { background: rgba(16, 185, 129, 0.2); border-color: var(--emerald); color: #a7f3d0; }
+    .opt-btn.wrong { background: rgba(239, 68, 68, 0.2); border-color: var(--rose); color: #fca5a5; }
+    .opt-badge { width: 28px; height: 28px; border-radius: 8px; background: #1f2937; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 0.85rem; shrink-0; }
+
+    .explanation-box { padding: 16px; border-radius: 12px; background: rgba(30, 41, 59, 0.5); border: 1px solid #334155; font-size: 0.88rem; line-height: 1.5; }
+    .quiz-footer { display: flex; justify-content: space-between; align-items: center; margin-top: 10px; padding-top: 16px; border-top: 1px solid var(--border); }
+    .jump-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(42px, 1fr)); gap: 6px; }
+    .jump-btn { height: 38px; border-radius: 8px; border: 1px solid var(--border); background: #0f172a; color: var(--text-muted); font-weight: 700; font-size: 0.8rem; cursor: pointer; }
+    .jump-btn.current { border-color: var(--blue); color: #fff; background: rgba(59,130,246,0.3); }
+
+    /* Infographic Styles */
+    .station-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 16px; }
+    .station-card { background: rgba(17, 24, 39, 0.7); border: 1px solid var(--border); border-radius: 14px; padding: 18px; display: flex; flex-direction: column; gap: 12px; }
+    .station-card h3 { font-size: 1.05rem; font-weight: 800; color: #fff; }
+    .station-badge { align-self: flex-start; font-size: 11px; font-weight: 800; padding: 2px 8px; border-radius: 6px; }
+
+    /* True/False table */
+    .tf-item { background: rgba(15, 23, 42, 0.7); border: 1px solid var(--border); border-radius: 12px; padding: 14px; margin-bottom: 10px; display: flex; flex-direction: column; gap: 8px; }
+    .tf-row { display: flex; justify-content: space-between; align-items: center; gap: 12px; }
+    .tf-btn { padding: 6px 16px; border-radius: 8px; font-weight: 700; font-size: 0.8rem; border: 1px solid var(--border); background: #1f2937; color: #d1d5db; cursor: pointer; }
+    .tf-btn.selected-true { background: var(--emerald); color: #fff; border-color: var(--emerald); }
+    .tf-btn.selected-false { background: var(--rose); color: #fff; border-color: var(--rose); }
+
+    /* Modal */
+    .modal { position: fixed; inset: 0; background: rgba(0,0,0,0.85); display: none; align-items: center; justify-content: center; z-index: 1000; padding: 16px; }
+    .modal.show { display: flex; }
+    .modal-content { background: var(--card-bg); border: 1px solid var(--border); border-radius: 20px; max-width: 650px; width: 100%; padding: 24px; box-shadow: 0 20px 40px rgba(0,0,0,0.8); }
+
+    /* Controls button */
+    .btn-action { padding: 10px 20px; font-weight: 800; font-size: 0.88rem; border-radius: 10px; cursor: pointer; border: none; transition: all 0.2s; display: inline-flex; align-items: center; gap: 8px; }
+    .btn-action.blue { background: var(--blue); color: #fff; }
+    .btn-action.blue:hover { background: #2563eb; }
+    .btn-action.amber { background: var(--amber); color: #000; }
+
+    @media (max-width: 640px) {
+      body { padding: 8px; }
+      .quiz-card { padding: 16px; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <!-- Header -->
+  <header>
+    <div>
+      <span class="badge">📖 Tin học 11 • Bài 8 (KNTT)</span>
+      <h1>ĐẤU TRƯỜNG BÀI 8: THƯ ĐIỆN TỬ & MẠNG XÃ HỘI</h1>
+      <p class="desc">Trò chơi học tập & thuyết trình tương tác: 20 câu trắc nghiệm ABCD (độ dài cân đối), 4 câu Đúng/Sai, 4 câu tự luận và hệ thống Infographic trực quan cho 4 Tổ.</p>
+    </div>
+    <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+      <button class="btn-action amber" onclick="openBuzzerModal()">⚡ Bấm Chuông 4 Tổ</button>
+      <button class="btn-action blue" onclick="toggleSound()">🔊 <span id="sound-status">Bật Âm Thanh</span></button>
+    </div>
+  </header>
+
+  <!-- Navigation Tabs -->
+  <div class="nav-tabs">
+    <button class="nav-btn active" onclick="switchTab('infographic')">🗺️ Infographic Kiến Thức</button>
+    <button class="nav-btn" onclick="switchTab('mcq')">📝 20 Câu Trắc Nghiệm (ABCD)</button>
+    <button class="nav-btn" onclick="switchTab('tf')">⚖️ 4 Câu Đúng / Sai (16 Ý)</button>
+    <button class="nav-btn" onclick="switchTab('essay')">✍️ 4 Câu Tự Luận Ngắn</button>
+  </div>
+
+  <!-- 4-Team Scoreboard -->
+  <div class="scoreboard">
+    <div class="scoreboard-title">
+      <span>🏆 BẢNG ĐIỂM THI ĐUA 4 TỔ</span>
+      <div style="display:flex; gap: 8px;">
+        <button class="btn-sm" onclick="spinRandomTeam()">🎲 Chọn Tổ Ngẫu Nhiên</button>
+        <button class="btn-sm" onclick="resetScores()">🔄 Đặt lại điểm</button>
+      </div>
+    </div>
+    <div class="teams-grid" id="teams-container">
+      <!-- Generated by JS -->
+    </div>
+  </div>
+
+  <!-- Tab 1: Infographic Section -->
+  <div id="tab-infographic" class="quiz-card">
+    <div style="display:flex; justify-content:space-between; align-items:center;">
+      <h2 style="font-size:1.3rem; font-weight:800; color:#fff;">HỆ THỐNG KIẾN THỨC CỐT LÕI (SẢN PHẨM INFOGRAPHIC)</h2>
+      <span class="badge">Bản đồ tư duy 4 trạm</span>
+    </div>
+
+    <div class="station-grid">
+      <!-- Station 1 -->
+      <div class="station-card">
+        <span class="station-badge" style="background: rgba(245, 158, 11, 0.2); color: #f59e0b;">Trạm 01 • Gmail</span>
+        <h3>Dấu Thư Quan Trọng</h3>
+        <p style="font-size:0.85rem; color:#cbd5e1;">• Biểu tượng hình dấu <strong>màu vàng</strong> trước tên người gửi.<br>• Gmail tự động nhận diện dựa trên: Tần suất gửi, thư được mở/trả lời, từ khóa thường đọc, thư gắn sao.<br>• Cú pháp tìm kiếm nhanh: <code style="background:#000; padding:2px 6px; border-radius:4px; color:#fde047;">is:important</code></p>
+      </div>
+      <!-- Station 2 -->
+      <div class="station-card">
+        <span class="station-badge" style="background: rgba(59, 130, 246, 0.2); color: #60a5fa;">Trạm 02 • Gmail</span>
+        <h3>Quản Lý Bằng Nhãn (Label)</h3>
+        <p style="font-size:0.85rem; color:#cbd5e1;">• Nhãn hoạt động như thẻ phân loại (tag). Một thư có thể có <strong>nhiều nhãn</strong> cùng lúc mà không tốn dung lượng.<br>• <strong>LƯU Ý CỐT LÕI:</strong> Khi xóa một thư, thư đó sẽ bị xóa khỏi <strong>MỌI NHÃN</strong> và biến mất khỏi hộp thư đến!</p>
+      </div>
+      <!-- Station 3 -->
+      <div class="station-card">
+        <span class="station-badge" style="background: rgba(139, 92, 246, 0.2); color: #c084fc;">Trạm 03 • Facebook</span>
+        <h3>Khởi Tạo Fanpage</h3>
+        <p style="font-size:0.85rem; color:#cbd5e1;">• Mục đích: Giúp tổ chức, doanh nghiệp, lớp học quảng bá hình ảnh, sự kiện ra cộng đồng.<br>• Cách mở: Menu <strong>9 dấu chấm</strong> -&gt; Chọn Trang.<br>• 2 Thông tin bắt buộc ban đầu: <strong>Tên trang</strong> và <strong>Hạng mục</strong>.</p>
+      </div>
+      <!-- Station 4 -->
+      <div class="station-card">
+        <span class="station-badge" style="background: rgba(239, 68, 68, 0.2); color: #f87171;">Trạm 04 • Facebook</span>
+        <h3>Quyền Riêng Tư & An Toàn</h3>
+        <p style="font-size:0.85rem; color:#cbd5e1;">• Bật <strong>"Xét duyệt bài viết có gắn thẻ"</strong> để ngăn chặn bài rác tràn lan trên trang cá nhân.<br>• Dùng <strong>"Chế độ xem" (View As)</strong> để kiểm tra xem người ngoài nhìn thấy những gì.<br>• Xóa lịch sử hoạt động ngoài Facebook và tắt vị trí.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Tab 2: 20 Multiple Choice Questions -->
+  <div id="tab-mcq" class="quiz-card" style="display:none;">
+    <div class="quiz-header">
+      <span id="mcq-indicator" style="font-weight:700; color:var(--blue);">CÂU HỎI 1 / 20</span>
+      <span id="mcq-ref">SGK Tin học 11 - Trang 39</span>
+    </div>
+
+    <div class="question-title" id="mcq-title">Đang tải câu hỏi...</div>
+
+    <div class="options-grid" id="mcq-options">
+      <!-- Options injected by JS -->
+    </div>
+
+    <div class="explanation-box" id="mcq-explanation" style="display:none;"></div>
+
+    <div class="quiz-footer">
+      <button class="btn-sm" onclick="prevMCQ()">← Câu trước</button>
+      <div style="font-size:0.8rem; color:var(--text-muted);">Tổ đang chọn: <strong id="active-team-name" style="color:#60a5fa;">Tổ 1</strong> (+20 điểm khi đúng)</div>
+      <button class="btn-sm primary" onclick="nextMCQ()">Câu tiếp theo →</button>
+    </div>
+
+    <!-- 20 Quick jump buttons -->
+    <div class="jump-grid" id="mcq-jump-grid"></div>
+  </div>
+
+  <!-- Tab 3: True / False (4 Questions x 4 Items) -->
+  <div id="tab-tf" class="quiz-card" style="display:none;">
+    <div class="quiz-header">
+      <span id="tf-indicator" style="font-weight:700; color:var(--purple);">CÂU ĐÚNG / SAI 1 / 4</span>
+      <span id="tf-ref">SGK Tin học 11 - Trang 39, 40</span>
+    </div>
+
+    <div style="background:rgba(139,92,246,0.15); border:1px solid rgba(139,92,246,0.3); padding:14px; border-radius:12px;">
+      <div style="font-size:0.75rem; font-weight:800; color:#c084fc; text-transform:uppercase;">Tình huống:</div>
+      <div id="tf-context" style="font-size:0.95rem; font-weight:700; color:#fff; margin-top:4px;">...</div>
+    </div>
+
+    <div id="tf-items-container">
+      <!-- Sub-items a, b, c, d generated by JS -->
+    </div>
+
+    <div class="quiz-footer">
+      <button class="btn-sm" onclick="prevTF()">← Câu trước</button>
+      <button class="btn-action blue" onclick="checkTF()">Xác Nhận & Chấm Điểm</button>
+      <button class="btn-sm primary" onclick="nextTF()">Câu tiếp theo →</button>
+    </div>
+  </div>
+
+  <!-- Tab 4: 4 Short-Answer Essay Questions -->
+  <div id="tab-essay" class="quiz-card" style="display:none;">
+    <div class="quiz-header">
+      <span id="essay-indicator" style="font-weight:700; color:var(--emerald);">CÂU TỰ LUẬN 1 / 4</span>
+      <span id="essay-ref">SGK Tin học 11 - Trang 39, 40</span>
+    </div>
+
+    <h2 id="essay-title" style="font-size:1.15rem; font-weight:800; color:#fff;">Tiêu đề câu hỏi tự luận</h2>
+    <p id="essay-prompt" style="font-size:0.95rem; color:#cbd5e1; line-height:1.6;">Nội dung câu hỏi...</p>
+
+    <div>
+      <label style="font-size:0.8rem; font-weight:700; color:#9ca3af; display:block; margin-bottom:6px;">Ý kiến trả lời của Tổ:</label>
+      <textarea id="essay-input" rows="4" style="width:100%; border-radius:10px; background:#090d16; border:1px solid var(--border); color:#fff; padding:12px; font-size:0.9rem;" placeholder="Nhập tóm tắt câu trả lời tại đây..."></textarea>
+    </div>
+
+    <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;">
+      <button class="btn-sm" onclick="toggleEssayModel()">👁️ Đối chiếu đáp án chuẩn & thang điểm</button>
+      <div style="display:flex; gap:6px; align-items:center;">
+        <span style="font-size:0.75rem; color:#9ca3af;">Giáo viên chấm điểm:</span>
+        <button class="btn-sm" onclick="awardEssayScore(10)">+10đ</button>
+        <button class="btn-sm" onclick="awardEssayScore(20)">+20đ</button>
+        <button class="btn-sm primary" onclick="awardEssayScore(25)">+25đ (Tối đa)</button>
+      </div>
+    </div>
+
+    <div id="essay-model-answer" class="explanation-box" style="display:none;">
+      <!-- Sample answer injected here -->
+    </div>
+
+    <div class="quiz-footer">
+      <button class="btn-sm" onclick="prevEssay()">← Câu trước</button>
+      <button class="btn-sm primary" onclick="nextEssay()">Câu tiếp theo →</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Chuông Bấm 4 Tổ -->
+<div class="modal" id="buzzer-modal">
+  <div class="modal-content">
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
+      <h3 style="font-size:1.2rem; font-weight:900; color:#fff;">⚡ CHUÔNG GIÀNH QUYỀN TRẢ LỜI</h3>
+      <button onclick="closeBuzzerModal()" style="background:none; border:none; color:#9ca3af; font-size:1.4rem; cursor:pointer;">✕</button>
+    </div>
+    <p style="font-size:0.85rem; color:#9ca3af; margin-bottom:16px;">Bấm phím 1, 2, 3, 4 trên bàn phím hoặc chạm vào tổ bên dưới để giành quyền trả lời!</p>
+
+    <div id="buzzer-winner" style="display:none; padding:12px; background:rgba(245,158,11,0.2); border:1px solid #f59e0b; border-radius:10px; text-align:center; margin-bottom:16px; font-weight:800; color:#fde047;"></div>
+
+    <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
+      <button class="btn-action blue" style="justify-content:center; padding:18px;" onclick="handleBuzz(1)">⚡ Tổ 1 (Phím 1)</button>
+      <button class="btn-action amber" style="justify-content:center; padding:18px;" onclick="handleBuzz(2)">🚀 Tổ 2 (Phím 2)</button>
+      <button class="btn-action" style="background:#8b5cf6; color:#fff; justify-content:center; padding:18px;" onclick="handleBuzz(3)">🛡️ Tổ 3 (Phím 3)</button>
+      <button class="btn-action" style="background:#ea580c; color:#fff; justify-content:center; padding:18px;" onclick="handleBuzz(4)">🔥 Tổ 4 (Phím 4)</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  /* TOÀN BỘ JAVASCRIPT ĐÓNG GÓI NGUYÊN BẢN KHÔNG CẦN DEPENDENCY */
+  
+  // 1. ÂM THANH WEB AUDIO SYNTHESIZER
+  let audioCtx = null;
+  let isSoundEnabled = true;
+
+  function getAudioCtx() {
+    if (!audioCtx) {
+      audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    }
+    if (audioCtx.state === 'suspended') audioCtx.resume();
+    return audioCtx;
+  }
+
+  function playTone(freq, type = 'sine', duration = 0.2, gainVal = 0.2) {
+    if (!isSoundEnabled) return;
+    try {
+      const ctx = getAudioCtx();
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.type = type;
+      osc.frequency.setValueAtTime(freq, ctx.currentTime);
+      gain.gain.setValueAtTime(gainVal, ctx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + duration);
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+      osc.start();
+      osc.stop(ctx.currentTime + duration);
+    } catch(e) {}
+  }
+
+  function playCorrectSound() {
+    playTone(587.33, 'sine', 0.15, 0.2); // D5
+    setTimeout(() => playTone(880, 'sine', 0.3, 0.25), 120); // A5
+  }
+
+  function playWrongSound() {
+    playTone(220, 'triangle', 0.3, 0.2);
+  }
+
+  function playBuzzerSound() {
+    playTone(550, 'sawtooth', 0.1, 0.3);
+    setTimeout(() => playTone(700, 'sawtooth', 0.2, 0.3), 80);
+  }
+
+  function toggleSound() {
+    isSoundEnabled = !isSoundEnabled;
+    document.getElementById('sound-status').innerText = isSoundEnabled ? 'Bật Âm Thanh' : 'Tắt Âm Thanh';
+  }
+
+  // 2. DỮ LIỆU BÀI 8 TIN HỌC 11
+  const TEAMS = [
+    { id: 1, name: 'Tổ 1: Biệt Đội Gmail', score: 0, avatar: '⚡' },
+    { id: 2, name: 'Tổ 2: Chiến Binh Fanpage', score: 0, avatar: '🚀' },
+    { id: 3, name: 'Tổ 3: Hiệp Sĩ Riêng Tư', score: 0, avatar: '🛡️' },
+    { id: 4, name: 'Tổ 4: Đại Sứ An Toàn', score: 0, avatar: '🔥' }
+  ];
+
+  let activeTeamId = 1;
+
+  // 20 CÂU TRẮC NGHIỆM ĐÁP ÁN CÂN ĐỐI
+  const MCQS = [
+    {
+      q: "Dấu hiệu nhận biết một thư điện tử quan trọng trong hộp thư Gmail có biểu tượng màu gì?",
+      options: [
+        "Biểu tượng mũi tên hình dấu màu vàng rực rỡ.",
+        "Biểu tượng ngôi sao năm cánh có viền màu đỏ tươi.",
+        "Biểu tượng kẹp ghim đính kèm tài liệu màu xanh lam.",
+        "Biểu tượng lá cờ ưu tiên hiển thị màu lục thẫm."
+      ],
+      correct: 0,
+      exp: "Gmail hỗ trợ tự động xác định và đánh dấu thư quan trọng bằng dấu màu vàng (Hình 8.1 SGK trang 39).",
+      ref: "SGK Tin học 11 - Trang 39"
+    },
+    {
+      q: "Hệ thống Gmail tự động đánh giá và gắn dấu thư quan trọng dựa trên dấu hiệu chủ yếu nào?",
+      options: [
+        "Dựa vào người gửi thư và tần suất tương tác gửi thư.",
+        "Dựa vào kích thước dung lượng của tệp tin đính kèm.",
+        "Dựa vào khung giờ mà bức thư được phát đi trong ngày.",
+        "Dựa vào kiểu phông chữ và kích thước chữ soạn thảo thư."
+      ],
+      correct: 0,
+      exp: "Gmail tự động xác định dựa vào: người gửi và tần suất gửi cho một người; thư được mở và trả lời; từ khoá thường xuyên đọc; thư được gắn sao, lưu trữ,... (SGK tr.39)",
+      ref: "SGK Tin học 11 - Trang 39"
+    },
+    {
+      q: "Để lọc và hiển thị tất cả các thư điện tử được đánh dấu quan trọng trong Gmail, ta nhập cú pháp nào?",
+      options: [
+        "Nhập cú pháp tìm kiếm chính xác là: is:important.",
+        "Nhập cú pháp tìm kiếm chính xác là: is:starred_mail.",
+        "Nhập cú pháp tìm kiếm chính xác là: is:unread_message.",
+        "Nhập cú pháp tìm kiếm chính xác là: is:category_forum."
+      ],
+      correct: 0,
+      exp: "Bước 3 SGK trang 39: Thực hiện tìm kiếm 'is: important' trong Gmail để hiển thị danh sách tất cả thư quan trọng.",
+      ref: "SGK Tin học 11 - Trang 39"
+    },
+    {
+      q: "Muốn thay đổi trạng thái của một thư từ quan trọng thành không quan trọng, người dùng thao tác ra sao?",
+      options: [
+        "Nháy chuột trực tiếp vào biểu tượng dấu quan trọng.",
+        "Kéo thả bức thư vào bên trong danh mục thư rác ngay.",
+        "Thực hiện xoá vĩnh viễn bức thư ra khỏi hòm thư đến.",
+        "Đổi tiêu đề bức thư rồi nhấn tổ hợp phím lưu dữ liệu."
+      ],
+      correct: 0,
+      exp: "Bước 2 SGK trang 39: Nháy chuột vào dấu quan trọng để thay đổi trạng thái quan trọng/không quan trọng.",
+      ref: "SGK Tin học 11 - Trang 39"
+    },
+    {
+      q: "Tính năng Nhãn (Label) trong hộp thư điện tử Gmail được thiết kế nhằm mục đích trọng tâm nào?",
+      options: [
+        "Phân loại, sắp xếp thư để tiết kiệm thời gian tìm kiếm.",
+        "Tự động chuyển tiếp thư nhận được tới người dùng khác.",
+        "Thay đổi phông chữ và màu nền cho giao diện hòm thư đến.",
+        "Ngăn chặn mọi thư điện tử có chứa tập tin ảnh dung lượng lớn."
+      ],
+      correct: 0,
+      exp: "SGK trang 39: Sử dụng Nhãn (Label) để sắp xếp, phân loại thư trong hộp thư đến giúp tiết kiệm thời gian khi tìm kiếm lại các thư, tránh thất lạc thông tin.",
+      ref: "SGK Tin học 11 - Trang 39"
+    },
+    {
+      q: "Khác biệt bản chất giữa Nhãn (Label) trong Gmail và Thư mục (Folder) trong hệ điều hành máy tính là gì?",
+      options: [
+        "Xoá thư ở một nhãn sẽ xoá thư ở mọi nhãn và hộp thư đến.",
+        "Một thư chỉ được phép gán duy nhất vào một nhãn xác định.",
+        "Nhãn không hỗ trợ việc tìm kiếm nội dung bằng từ khoá ngắn.",
+        "Nhãn chỉ được sử dụng khi máy tính ngắt kết nối mạng Internet."
+      ],
+      correct: 0,
+      exp: "Lưu ý SGK trang 39: Nhãn khác với thư mục. Khi em xoá một thư, thư đó sẽ bị xoá khỏi mọi nhãn đính kèm cũng như trong hộp thư đến.",
+      ref: "SGK Tin học 11 - Trang 39"
+    },
+    {
+      q: "Để khởi tạo một nhãn mới trong giao diện Gmail, người dùng thực hiện thao tác ban đầu tại đâu?",
+      options: [
+        "Nháy chọn 'Danh sách mở rộng' ở bên trái rồi 'Tạo nhãn mới'.",
+        "Bấm nút 'Soạn thư' rồi nhập tên của nhãn vào ô địa chỉ nhận.",
+        "Vào danh mục 'Thư đã gửi' rồi bấm chuột phải lên màn hình.",
+        "Nháy vào ảnh đại diện cá nhân rồi bấm chọn dòng 'Đổi tên nhãn'."
+      ],
+      correct: 0,
+      exp: "Bước 1 SGK trang 40: Mở Gmail -> Danh sách mở rộng bên trái -> Tạo nhãn mới -> Nhập tên và Save.",
+      ref: "SGK Tin học 11 - Trang 40"
+    },
+    {
+      q: "Thao tác nào sau đây là bước chuẩn xác để gán nhãn cho một hoặc nhiều thư đã chọn trong Gmail?",
+      options: [
+        "Nháy biểu tượng Nhãn trên thanh công cụ rồi chọn nhãn muốn gán.",
+        "Kéo tệp đính kèm của bức thư thả vào biểu tượng thùng rác máy tính.",
+        "Nhấn phím F5 trên bàn phím để hệ thống tự động gán nhãn mặc định.",
+        "Chuyển tiếp bức thư cho hòm thư quản trị viên để được cấp phép nhãn."
+      ],
+      correct: 0,
+      exp: "Bước 2 SGK trang 40: Chọn thư -> Bấm nút Nhãn trên thanh công cụ -> Chọn nhãn -> Áp dụng.",
+      ref: "SGK Tin học 11 - Trang 40"
+    },
+    {
+      q: "Trang Fanpage trên mạng xã hội Facebook được thiết kế chủ yếu nhằm phục vụ mục đích gì?",
+      options: [
+        "Giúp tổ chức, doanh nghiệp quảng bá hình ảnh, sản phẩm rộng rãi.",
+        "Chỉ phục vụ việc nhắn tin bí mật riêng tư giữa hai cá nhân với nhau.",
+        "Dùng làm nơi lưu trữ dữ liệu cá nhân không cho bất kỳ ai truy cập.",
+        "Thay thế hoàn toàn cho hệ thống trang thông tin điện tử của quốc gia."
+      ],
+      correct: 0,
+      exp: "Nhiệm vụ 3 SGK trang 40: Fanpage là trang web trên Facebook giúp tổ chức, doanh nghiệp quảng bá hình ảnh, thương hiệu và sản phẩm.",
+      ref: "SGK Tin học 11 - Trang 40"
+    },
+    {
+      q: "Để bắt đầu các bước tạo một trang Fanpage mới trên Facebook, người dùng nhấn vào biểu tượng nào?",
+      options: [
+        "Biểu tượng Menu chứa chín dấu chấm tròn rồi chọn lệnh 'Trang'.",
+        "Biểu tượng hình chiếc chuông thông báo hoạt động gần đây của bạn.",
+        "Biểu tượng hình kính lúp tìm kiếm bạn bè ở góc trên của màn hình.",
+        "Biểu tượng bánh răng cắm sâu vào mục trợ giúp của nhà phát triển."
+      ],
+      correct: 0,
+      exp: "Bước 1 SGK trang 40: Nháy vào Menu (9 dấu chấm) -> Trong mục Tạo chọn Trang.",
+      ref: "SGK Tin học 11 - Trang 40"
+    },
+    {
+      q: "Khi khởi tạo một Fanpage Facebook, hai trường thông tin nào bắt buộc người dùng phải cung cấp?",
+      options: [
+        "Tên trang cần tạo và Hạng mục phù hợp mô tả lĩnh vực hoạt động.",
+        "Số tài khoản ngân hàng và Mã số chứng minh nhân dân chủ sở hữu.",
+        "Địa chỉ nhà riêng cụ thể và Số điện thoại di động của các thành viên.",
+        "Giấy phép kinh doanh có công chứng và Chữ ký số điện tử của trường."
+      ],
+      correct: 0,
+      exp: "Hình 8.3 SGK trang 40: 1. Nhập tên trang; 2. Chọn hạng mục phù hợp.",
+      ref: "SGK Tin học 11 - Trang 40"
+    },
+    {
+      q: "Để thiết lập những ai có thể xem các bài viết của mình trong tương lai trên Facebook, ta vào mục nào?",
+      options: [
+        "Đăng nhập tài khoản, vào phần 'Cài đặt' rồi chọn 'Quyền riêng tư'.",
+        "Vào danh mục trò chơi trực tuyến rồi chọn mục chia sẻ kết quả điểm.",
+        "Mở cửa sổ chat Messenger cá nhân rồi bấm nút chặn người lạ gọi tới.",
+        "Vào mục lưu trữ tin nhắn rác rồi xóa bỏ hoàn toàn các liên kết lạ."
+      ],
+      correct: 0,
+      exp: "Bước 1 SGK trang 41: Chọn Cài đặt -> Quyền riêng tư.",
+      ref: "SGK Tin học 11 - Trang 41"
+    },
+    {
+      q: "Tùy chọn đối tượng nào sau đây trên Facebook cho phép tất cả mọi người trên mạng đều xem được bài viết?",
+      options: [
+        "Lựa chọn chế độ đối tượng là: 'Công khai' (Public) cho bài viết.",
+        "Lựa chọn chế độ đối tượng là: 'Bạn bè' (Friends) trong danh bạ.",
+        "Lựa chọn chế độ đối tượng là: 'Bạn bè ngoại trừ...' một số người.",
+        "Lựa chọn chế độ đối tượng là: 'Chỉ mình tôi' (Only me) bảo mật."
+      ],
+      correct: 0,
+      exp: "Hình 8.4 SGK trang 41: Công khai - Mọi người trên hoặc ngoài Facebook.",
+      ref: "SGK Tin học 11 - Trang 41"
+    },
+    {
+      q: "Nếu muốn đăng bài viết cho hầu hết bạn bè xem nhưng loại trừ vài người cụ thể, ta chọn thiết lập nào?",
+      options: [
+        "Thiết lập tuỳ chọn đối tượng xem bài: 'Bạn bè ngoại trừ...'.",
+        "Thiết lập tuỳ chọn đối tượng xem bài: 'Bạn bè của bạn bè...'.",
+        "Thiết lập tuỳ chọn đối tượng xem bài: 'Tất cả nhóm công khai'.",
+        "Thiết lập tuỳ chọn đối tượng xem bài: 'Khách vãng lai truy cập'."
+      ],
+      correct: 0,
+      exp: "Hình 8.4 SGK trang 41: 'Bạn bè ngoại trừ...' dùng để loại trừ những người bạn không muốn họ thấy bài.",
+      ref: "SGK Tin học 11 - Trang 41"
+    },
+    {
+      q: "Tính năng 'Xét duyệt bài viết có gắn thẻ bạn' trên Facebook mang lại lợi ích quan trọng nào?",
+      options: [
+        "Kiểm soát bài viết gắn thẻ trước khi nó xuất hiện trên trang cá nhân.",
+        "Tự động gửi tin nhắn cảm ơn tới người vừa thực hiện gắn thẻ tên mình.",
+        "Xóa toàn bộ các bình luận tiêu cực của người lạ trên các trang nhóm.",
+        "Tăng gấp đôi số lượng người theo dõi trang cá nhân trong vòng một tuần."
+      ],
+      correct: 0,
+      exp: "Hình 8.5 SGK trang 42: Bật xét duyệt giúp kiểm soát bài viết có gắn thẻ trước khi nó lên trang cá nhân.",
+      ref: "SGK Tin học 11 - Trang 42"
+    },
+    {
+      q: "Công cụ 'Chế độ xem' (View As) trong phần cài đặt Trang cá nhân và gắn thẻ dùng để làm gì?",
+      options: [
+        "Kiểm tra xem trang cá nhân hiển thị như thế nào với những người khác.",
+        "Tự động phóng to kích cỡ ảnh đại diện để nhận diện khuôn mặt rõ hơn.",
+        "Chuyển đổi giao diện hiển thị Facebook sang chế độ nền tối ban đêm.",
+        "Ghi lại toàn bộ lịch sử các cuộc gọi video giữa hai tài khoản bạn bè."
+      ],
+      correct: 0,
+      exp: "Hình 8.5 SGK trang 42: Dùng Chế độ xem để biết Mọi người có thể thấy những gì trên trang của bạn.",
+      ref: "SGK Tin học 11 - Trang 42"
+    },
+    {
+      q: "Tùy chọn 'Ẩn bình luận chứa một số từ nhất định khỏi trang cá nhân' hữu ích nhất trong trường hợp nào?",
+      options: [
+        "Ngăn chặn ngôn từ phản cảm, quấy rối hoặc từ khóa tiêu cực xuất hiện.",
+        "Tăng số lượng lượt chia sẻ bài viết lên các hội nhóm học tập của trường.",
+        "Giảm bớt lưu lượng pin tiêu thụ khi lướt mạng xã hội trên điện thoại.",
+        "Tự động phát hiện lỗi chính tả tiếng Việt trong bài đăng của người khác."
+      ],
+      correct: 0,
+      exp: "Hình 8.5 SGK trang 42: Ẩn bình luận chứa từ ngữ nhất định để thanh lọc bình luận xúc phạm, phản cảm.",
+      ref: "SGK Tin học 11 - Trang 42"
+    },
+    {
+      q: "Thao tác nào sau đây giúp người dùng ngăn chặn Facebook thu thập hành vi để phát tán quảng cáo mục tiêu?",
+      options: [
+        "Xoá lịch sử hoạt động ngoài Facebook trong mục cài đặt bảo mật.",
+        "Đăng tải liên tục nhiều bài viết có kèm liên kết trang web quảng cáo.",
+        "Thay đổi ảnh bìa cá nhân liên tục vào các khung giờ đêm muộn mỗi ngày.",
+        "Tắt âm thanh thông báo của các nhóm có đông thành viên tham gia thảo luận."
+      ],
+      correct: 0,
+      exp: "Vận dụng câu 2a SGK trang 42: Xoá lịch sử hoạt động Facebook để ngăn Facebook phát tán quảng cáo mục tiêu.",
+      ref: "SGK Tin học 11 - Trang 42"
+    },
+    {
+      q: "Để bảo vệ an toàn thông tin vị trí cá nhân khỏi các nguy cơ theo dõi trên mạng xã hội, ta nên làm gì?",
+      options: [
+        "Bật, tắt dịch vụ vị trí hợp lý và hạn chế chia sẻ toạ độ định vị.",
+        "Luôn luôn bật tính năng check-in vị trí ở mọi địa điểm em từng ghé qua.",
+        "Gửi toạ độ GPS nơi ở của bản thân cho tất cả các hội nhóm kết bạn lạ.",
+        "Công khai toàn bộ lịch trình chuyến đi xa của gia đình trước khi khởi hành."
+      ],
+      correct: 0,
+      exp: "Vận dụng câu 2b SGK trang 42: Bật, tắt dịch vụ vị trí của người dùng để bảo vệ quyền riêng tư vị trí.",
+      ref: "SGK Tin học 11 - Trang 42"
+    },
+    {
+      q: "Sự khác biệt cốt lõi giữa Dấu sao (Starred) và Dấu quan trọng (Important) trong Gmail là gì?",
+      options: [
+        "Dấu sao do người dùng chủ động gắn, dấu quan trọng do thuật toán đề xuất.",
+        "Dấu sao có màu vàng kim, còn dấu quan trọng luôn luôn mang màu đỏ sẫm.",
+        "Dấu sao không thể tìm kiếm, còn dấu quan trọng có thể tìm kiếm rất nhanh.",
+        "Dấu sao tự động biến mất sau 24 giờ, còn dấu quan trọng lưu vĩnh viễn mãi."
+      ],
+      correct: 0,
+      exp: "Vận dụng câu 1 SGK trang 42: Dấu sao do người dùng chủ động gắn thủ công, dấu quan trọng do Gmail tự động phân tích đánh giá.",
+      ref: "SGK Tin học 11 - Trang 42"
+    }
+  ];
+
+  // 4 CÂU ĐÚNG / SAI (16 Ý)
+  const TFS = [
+    {
+      context: "Khi thực hành quản lý và phân loại thư điện tử trong hộp thư đến Gmail:",
+      ref: "SGK Tin học 11 - Trang 39, 40",
+      items: [
+        { id: 'a', text: "Gmail chỉ tự động đánh dấu quan trọng đối với các thư có chứa từ khoá 'Khẩn cấp' trong tiêu đề.", correct: false, exp: "Sai. Gmail dựa vào tần suất, người gửi, thư được mở và trả lời..." },
+        { id: 'b', text: "Người dùng có thể gõ cụm từ 'is: important' vào thanh tìm kiếm Gmail để hiển thị toàn bộ thư quan trọng.", correct: true, exp: "Đúng. Đây là cú pháp chính thức ở Bước 3 SGK trang 39." },
+        { id: 'c', text: "Gán một Nhãn (Label) cho bức thư sẽ tạo ra thêm một bản sao chép mới của bức thư đó trong hòm thư.", correct: false, exp: "Sai. Nhãn chỉ là thẻ phân loại (tag), không nhân bản tệp." },
+        { id: 'd', text: "Khi người dùng xoá một bức thư, thư đó sẽ bị xoá khỏi mọi nhãn đính kèm cũng như trong hộp thư đến.", correct: true, exp: "Đúng. Lưu ý cốt lõi SGK trang 39." }
+      ]
+    },
+    {
+      context: "Trong nhiệm vụ tạo và quản lý Fanpage trên Facebook cho lớp học:",
+      ref: "SGK Tin học 11 - Trang 40, 41",
+      items: [
+        { id: 'a', text: "Chỉ các tổ chức, doanh nghiệp có đăng ký thương mại mới được quyền tạo Fanpage trên Facebook.", correct: false, exp: "Sai. Bất kỳ cá nhân nào cũng có thể tạo Fanpage cho lớp, CLB..." },
+        { id: 'b', text: "Hai thông tin bắt buộc phải nhập khi khởi tạo trang mới là Tên trang (Page name) và Hạng mục (Category).", correct: true, exp: "Đúng. Hình 8.3 SGK trang 40." },
+        { id: 'c', text: "Sau khi tạo trang hoàn tất, quản trị viên không thể chỉnh sửa mô tả hay ảnh bìa của trang Fanpage.", correct: false, exp: "Sai. Quản trị viên cập nhật thông tin bất kỳ lúc nào." },
+        { id: 'd', text: "Việc tạo và quản lý Fanpage cho một lớp học hay một tổ chức thương mại điện tử có quy trình thực hiện tương tự nhau.", correct: true, exp: "Đúng. Lưu ý SGK trang 41." }
+      ]
+    },
+    {
+      context: "Khi tìm hiểu và thiết lập quyền riêng tư các bài viết trên mạng xã hội Facebook:",
+      ref: "SGK Tin học 11 - Trang 41",
+      items: [
+        { id: 'a', text: "Chế độ 'Công khai' cho phép cả những người không có tài khoản Facebook vẫn có thể xem được nội dung bài viết.", correct: true, exp: "Đúng. Hình 8.4 SGK trang 41." },
+        { id: 'b', text: "Lựa chọn 'Bạn bè ngoại trừ...' dùng khi muốn bài viết hiển thị cho toàn bộ người theo dõi nhưng chặn một số bạn bè cụ thể.", correct: false, exp: "Sai. Áp dụng cho danh sách bạn bè, loại trừ những người chỉ định." },
+        { id: 'c', text: "Cài đặt quyền riêng tư bài viết trong tương lai sẽ tự động thay đổi đối tượng xem của tất cả bài viết cũ trong quá khứ.", correct: false, exp: "Sai. Chỉ áp dụng cho bài viết đăng trong tương lai." },
+        { id: 'd', text: "Chế độ 'Chỉ mình tôi' là tuỳ chọn đảm bảo mức độ riêng tư cao nhất cho bài viết trên dòng thời gian.", correct: true, exp: "Đúng. Chỉ chủ tài khoản mới nhìn thấy." }
+      ]
+    },
+    {
+      context: "Về việc thiết lập Trang cá nhân, Gắn thẻ và An toàn dữ liệu người dùng:",
+      ref: "SGK Tin học 11 - Trang 41, 42",
+      items: [
+        { id: 'a', text: "Bật xét duyệt bài viết có gắn thẻ giúp ngăn chặn bài viết của người khác tự động xuất hiện trên dòng thời gian cá nhân của em.", correct: true, exp: "Đúng. Cho phép kiểm duyệt trước khi hiển thị (SGK tr.42)." },
+        { id: 'b', text: "Công cụ 'Chế độ xem' (View As) cho phép em kiểm tra trang cá nhân của mình hiển thị thế nào dưới góc nhìn người khác.", correct: true, exp: "Đúng. Giúp phát hiện lộ dữ liệu cá nhân." },
+        { id: 'c', text: "Facebook không theo dõi hoạt động của người dùng ngoài ứng dụng Facebook để phân phối quảng cáo.", correct: false, exp: "Sai. Facebook theo dõi hành vi ngoài Facebook để phân phát quảng cáo." },
+        { id: 'd', text: "Luôn bật dịch vụ định vị vị trí 24/7 và check-in chi tiết địa điểm sinh sống là thói quen tốt để tăng cường bảo mật tài khoản.", correct: false, exp: "Sai. Làm tăng nguy cơ bị theo dõi đời tư." }
+      ]
+    }
+  ];
+
+  // 4 CÂU TỰ LUẬN
+  const ESSAYS = [
+    {
+      title: "Phân biệt Nhãn (Label) Gmail và Thư mục (Folder) máy tính",
+      ref: "SGK Tin học 11 - Trang 39, 40",
+      prompt: "Nêu điểm khác biệt cơ bản giữa Nhãn (Label) trong Gmail so với Thư mục (Folder) trong hệ điều hành máy tính. Điều gì sẽ xảy ra nếu em xoá một bức thư đang có gắn 2 nhãn khác nhau?",
+      sample: "1. Thư mục (Folder): Mỗi tệp chỉ nằm trong 1 thư mục duy nhất (muốn ở nhiều nơi phải sao chép tệp gây tốn bộ nhớ). Ngược lại, Nhãn (Label) Gmail hoạt động như các thẻ dán phân loại (tag): 1 bức thư có thể gắn đồng thời nhiều nhãn mà không tốn dung lượng nhân bản.\n2. Khi xoá bức thư: Thư đó sẽ bị xoá khỏi MỌI NHÃN đính kèm và biến mất khỏi hộp thư đến (chuyển vào Thùng rác)."
+    },
+    {
+      title: "Cú pháp tìm kiếm và Dấu hiệu nhận biết thư quan trọng",
+      ref: "SGK Tin học 11 - Trang 39",
+      prompt: "Để lọc nhanh toàn bộ các thư điện tử quan trọng trong Gmail, em sử dụng cú pháp tìm kiếm nào? Hãy nêu ít nhất 3 dấu hiệu mà Gmail tự động dựa vào để xác định một thư là quan trọng.",
+      sample: "1. Cú pháp: is:important\n2. 3 dấu hiệu nhận biết tự động của Gmail:\n- Người gửi và tần suất gửi thư cho người đó.\n- Thư được mở và trả lời thường xuyên.\n- Từ khoá có trong các thư thường xuyên đọc; thư từng được gắn sao hoặc lưu trữ."
+    },
+    {
+      title: "Mục đích tạo Fanpage Facebook và các thông tin khởi tạo",
+      ref: "SGK Tin học 11 - Trang 40, 41",
+      prompt: "Fanpage trên Facebook khác với Tài khoản cá nhân như thế nào về mục đích sử dụng? Để khởi tạo một Fanpage cho lớp 11A, em cần cung cấp những thông tin bắt buộc nào?",
+      sample: "1. Mục đích: Fanpage dành cho tổ chức, tập thể, doanh nghiệp để quảng bá hình ảnh, thương hiệu, sự kiện ra công chúng; không giới hạn số người theo dõi. Tài khoản cá nhân phục vụ kết bạn, giao tiếp riêng tư cá nhân (giới hạn 5000 bạn).\n2. Hai thông tin bắt buộc ban đầu: Tên trang (Page name) và Hạng mục phù hợp (Category)."
+    },
+    {
+      title: "Bảo vệ danh tính với Xét duyệt gắn thẻ và Chế độ xem (View As)",
+      ref: "SGK Tin học 11 - Trang 41, 42",
+      prompt: "Hãy giải thích tác dụng của hai tính năng: 'Xét duyệt bài viết có gắn thẻ' và 'Chế độ xem (View As)' trên Facebook. Vì sao học sinh cần chủ động kích hoạt hai tính năng này?",
+      sample: "1. Xét duyệt gắn thẻ: Giúp kiểm soát bài viết của người khác gắn thẻ mình trước khi nó hiển thị lên trang cá nhân, ngăn chặn bài quảng cáo rác hoặc nội dung xấu độc xúc phạm danh dự.\n2. Chế độ xem (View As): Giúp xem trang cá nhân dưới góc nhìn của người lạ, rà soát lộ lọt thông tin riêng tư (số điện thoại, nơi ở, ảnh riêng tư) để kịp thời khóa bảo mật."
+    }
+  ];
+
+  // 3. RENDER SCOREBOARD
+  function renderScoreboard() {
+    const container = document.getElementById('teams-container');
+    container.innerHTML = '';
+
+    TEAMS.forEach(team => {
+      const card = document.createElement('div');
+      card.className = `team-card ${team.id === activeTeamId ? 'active' : ''}`;
+      card.innerHTML = `
+        <div class="team-header">
+          <span class="team-name">${team.avatar} ${team.name}</span>
+          <button class="btn-sm ${team.id === activeTeamId ? 'primary' : ''}" onclick="selectTeam(${team.id})">
+            ${team.id === activeTeamId ? 'Đang chọn' : 'Chọn tổ'}
+          </button>
+        </div>
+        <div class="team-score">${team.score} <span style="font-size:0.8rem; font-weight:normal; color:#9ca3af;">điểm</span></div>
+        <div class="btn-group">
+          <button class="btn-sm" onclick="adjustScore(${team.id}, -10)">-10</button>
+          <button class="btn-sm" onclick="adjustScore(${team.id}, 10)">+10</button>
+          <button class="btn-sm primary" onclick="adjustScore(${team.id}, 20)">+20</button>
+        </div>
+      `;
+      container.appendChild(card);
+    });
+
+    const activeTeam = TEAMS.find(t => t.id === activeTeamId);
+    if (activeTeam) {
+      document.getElementById('active-team-name').innerText = activeTeam.name;
+    }
+  }
+
+  function selectTeam(id) {
+    activeTeamId = id;
+    renderScoreboard();
+  }
+
+  function adjustScore(id, delta) {
+    const team = TEAMS.find(t => t.id === id);
+    if (team) {
+      team.score = Math.max(0, team.score + delta);
+      if (delta > 0) playCorrectSound();
+      renderScoreboard();
+    }
+  }
+
+  function resetScores() {
+    if (confirm("Đặt lại điểm cả 4 tổ về 0?")) {
+      TEAMS.forEach(t => t.score = 0);
+      renderScoreboard();
+    }
+  }
+
+  function spinRandomTeam() {
+    playBuzzerSound();
+    const rand = Math.floor(Math.random() * TEAMS.length) + 1;
+    selectTeam(rand);
+    alert(`Đã chọn ngẫu nhiên: ${TEAMS[rand - 1].name} trả lời!`);
+  }
+
+  // 4. TAB CONTROLLER
+  function switchTab(tabId) {
+    const tabs = ['infographic', 'mcq', 'tf', 'essay'];
+    tabs.forEach(t => {
+      document.getElementById(`tab-${t}`).style.display = (t === tabId) ? 'flex' : 'none';
+    });
+
+    const btns = document.querySelectorAll('.nav-btn');
+    btns.forEach((b, idx) => {
+      b.classList.toggle('active', tabs[idx] === tabId);
+    });
+  }
+
+  // 5. MCQ LOGIC
+  let currentMCQIndex = 0;
+  let mcqAnswers = {};
+
+  function renderMCQ() {
+    const q = MCQS[currentMCQIndex];
+    document.getElementById('mcq-indicator').innerText = `CÂU HỎI ${currentMCQIndex + 1} / ${MCQS.length}`;
+    document.getElementById('mcq-ref').innerText = q.ref;
+    document.getElementById('mcq-title').innerText = q.q;
+
+    const optContainer = document.getElementById('mcq-options');
+    optContainer.innerHTML = '';
+    const letters = ['A', 'B', 'C', 'D'];
+
+    const answered = mcqAnswers[currentMCQIndex];
+
+    q.options.forEach((opt, idx) => {
+      const btn = document.createElement('button');
+      btn.className = 'opt-btn';
+
+      if (answered !== undefined) {
+        if (idx === q.correct) {
+          btn.classList.add('correct');
+        } else if (idx === answered && idx !== q.correct) {
+          btn.classList.add('wrong');
+        }
+      }
+
+      btn.onclick = () => selectMCQOption(idx);
+      btn.innerHTML = `
+        <span class="opt-badge">${letters[idx]}</span>
+        <span style="flex:1;">${opt}</span>
+      `;
+      optContainer.appendChild(btn);
+    });
+
+    const expBox = document.getElementById('mcq-explanation');
+    if (answered !== undefined) {
+      expBox.style.display = 'block';
+      const isCorrect = (answered === q.correct);
+      expBox.innerHTML = `
+        <div style="font-weight:800; color:${isCorrect ? '#34d399' : '#f87171'}; margin-bottom:4px;">
+          ${isCorrect ? '✓ CHÍNH XÁC!' : '✕ CHƯA CHÍNH XÁC!'} (Đáp án đúng: ${letters[q.correct]})
+        </div>
+        <div><strong>Giải thích:</strong> ${q.exp}</div>
+      `;
+    } else {
+      expBox.style.display = 'none';
+    }
+
+    renderMCQJumpGrid();
+  }
+
+  function selectMCQOption(idx) {
+    if (mcqAnswers[currentMCQIndex] !== undefined) return;
+    mcqAnswers[currentMCQIndex] = idx;
+    const isCorrect = idx === MCQS[currentMCQIndex].correct;
+
+    if (isCorrect) {
+      playCorrectSound();
+      adjustScore(activeTeamId, 20);
+    } else {
+      playWrongSound();
+      adjustScore(activeTeamId, -10);
+    }
+    renderMCQ();
+  }
+
+  function nextMCQ() {
+    if (currentMCQIndex < MCQS.length - 1) {
+      currentMCQIndex++;
+      renderMCQ();
+    }
+  }
+
+  function prevMCQ() {
+    if (currentMCQIndex > 0) {
+      currentMCQIndex--;
+      renderMCQ();
+    }
+  }
+
+  function renderMCQJumpGrid() {
+    const grid = document.getElementById('mcq-jump-grid');
+    grid.innerHTML = '';
+    MCQS.forEach((_, idx) => {
+      const b = document.createElement('button');
+      b.className = `jump-btn ${idx === currentMCQIndex ? 'current' : ''}`;
+      if (mcqAnswers[idx] !== undefined) {
+        b.style.borderColor = (mcqAnswers[idx] === MCQS[idx].correct) ? '#10b981' : '#ef4444';
+        b.style.color = (mcqAnswers[idx] === MCQS[idx].correct) ? '#34d399' : '#f87171';
+      }
+      b.innerText = idx + 1;
+      b.onclick = () => { currentMCQIndex = idx; renderMCQ(); };
+      grid.appendChild(b);
+    });
+  }
+
+  // 6. TRUE / FALSE LOGIC
+  let currentTFIndex = 0;
+  let tfChoices = {}; // key: "qIndex-itemId" -> bool
+  let tfSubmitted = {};
+
+  function renderTF() {
+    const q = TFS[currentTFIndex];
+    document.getElementById('tf-indicator').innerText = `CÂU ĐÚNG / SAI ${currentTFIndex + 1} / ${TFS.length}`;
+    document.getElementById('tf-ref').innerText = q.ref;
+    document.getElementById('tf-context').innerText = q.context;
+
+    const container = document.getElementById('tf-items-container');
+    container.innerHTML = '';
+
+    const isDone = !!tfSubmitted[currentTFIndex];
+
+    q.items.forEach(item => {
+      const div = document.createElement('div');
+      div.className = 'tf-item';
+
+      const key = `${currentTFIndex}-${item.id}`;
+      const userChoice = tfChoices[key];
+
+      div.innerHTML = `
+        <div class="tf-row">
+          <div style="display:flex; align-items:flex-start; gap:8px; flex:1;">
+            <strong style="color:#c084fc; text-transform:uppercase;">${item.id})</strong>
+            <span style="font-size:0.92rem; color:#fff;">${item.text}</span>
+          </div>
+          <div style="display:flex; gap:6px;">
+            <button class="tf-btn ${userChoice === true ? 'selected-true' : ''}" onclick="pickTF('${item.id}', true)">ĐÚNG</button>
+            <button class="tf-btn ${userChoice === false ? 'selected-false' : ''}" onclick="pickTF('${item.id}', false)">SAI</button>
+          </div>
+        </div>
+        ${isDone ? `
+          <div style="font-size:0.8rem; color:#cbd5e1; border-top:1px solid var(--border); padding-top:6px; margin-top:4px;">
+            Đáp án chuẩn: <strong style="color:${item.correct ? '#34d399' : '#f87171'}">${item.correct ? 'ĐÚNG' : 'SAI'}</strong> - ${item.exp}
+          </div>
+        ` : ''}
+      `;
+      container.appendChild(div);
+    });
+  }
+
+  function pickTF(itemId, choice) {
+    if (tfSubmitted[currentTFIndex]) return;
+    tfChoices[`${currentTFIndex}-${itemId}`] = choice;
+    renderTF();
+  }
+
+  function checkTF() {
+    const q = TFS[currentTFIndex];
+    const all = q.items.every(i => tfChoices[`${currentTFIndex}-${i.id}`] !== undefined);
+    if (!all) {
+      alert("Vui lòng chọn ĐÚNG hoặc SAI cho cả 4 ý!");
+      return;
+    }
+    tfSubmitted[currentTFIndex] = true;
+
+    let correctCount = 0;
+    q.items.forEach(i => {
+      if (tfChoices[`${currentTFIndex}-${i.id}`] === i.correct) correctCount++;
+    });
+
+    const pts = correctCount * 10;
+    adjustScore(activeTeamId, pts);
+    playCorrectSound();
+    alert(`Chúc mừng! Đúng ${correctCount}/4 ý! Đã cộng +${pts} điểm cho ${TEAMS[activeTeamId - 1].name}`);
+    renderTF();
+  }
+
+  function nextTF() {
+    if (currentTFIndex < TFS.length - 1) {
+      currentTFIndex++;
+      renderTF();
+    }
+  }
+
+  function prevTF() {
+    if (currentTFIndex > 0) {
+      currentTFIndex--;
+      renderTF();
+    }
+  }
+
+  // 7. ESSAY LOGIC
+  let currentEssayIndex = 0;
+  let isModelShown = false;
+
+  function renderEssay() {
+    const q = ESSAYS[currentEssayIndex];
+    document.getElementById('essay-indicator').innerText = `CÂU TỰ LUẬN ${currentEssayIndex + 1} / ${ESSAYS.length}`;
+    document.getElementById('essay-ref').innerText = q.ref;
+    document.getElementById('essay-title').innerText = q.title;
+    document.getElementById('essay-prompt').innerText = q.prompt;
+    document.getElementById('essay-input').value = '';
+    isModelShown = false;
+    document.getElementById('essay-model-answer').style.display = 'none';
+  }
+
+  function toggleEssayModel() {
+    isModelShown = !isModelShown;
+    const box = document.getElementById('essay-model-answer');
+    box.style.display = isModelShown ? 'block' : 'none';
+    if (isModelShown) {
+      box.innerHTML = `
+        <div style="font-weight:800; color:#34d399; margin-bottom:6px;">✓ ĐÁP ÁN CHUẨN THAM KHẢO (SGK TIN 11):</div>
+        <div style="white-space:pre-line; color:#e2e8f0; line-height:1.6;">${ESSAYS[currentEssayIndex].sample}</div>
+      `;
+    }
+  }
+
+  function awardEssayScore(pts) {
+    adjustScore(activeTeamId, pts);
+    playCorrectSound();
+    alert(`Đã cộng +${pts} điểm tự luận cho ${TEAMS[activeTeamId - 1].name}!`);
+  }
+
+  function nextEssay() {
+    if (currentEssayIndex < ESSAYS.length - 1) {
+      currentEssayIndex++;
+      renderEssay();
+    }
+  }
+
+  function prevEssay() {
+    if (currentEssayIndex > 0) {
+      currentEssayIndex--;
+      renderEssay();
+    }
+  }
+
+  // 8. BUZZER MODAL LOGIC
+  function openBuzzerModal() {
+    document.getElementById('buzzer-modal').classList.add('show');
+    document.getElementById('buzzer-winner').style.display = 'none';
+  }
+
+  function closeBuzzerModal() {
+    document.getElementById('buzzer-modal').classList.remove('show');
+  }
+
+  function handleBuzz(teamId) {
+    playBuzzerSound();
+    selectTeam(teamId);
+    const winBox = document.getElementById('buzzer-winner');
+    winBox.style.display = 'block';
+    winBox.innerText = `👑 ${TEAMS[teamId - 1].name.toUpperCase()} ĐÃ BẤM CHUÔNG GIÀNH QUYỀN TRẢ LỜI!`;
+  }
+
+  window.addEventListener('keydown', (e) => {
+    if (document.getElementById('buzzer-modal').classList.contains('show')) {
+      if (['1', '2', '3', '4'].includes(e.key)) {
+        handleBuzz(parseInt(e.key));
+      }
+    }
+  });
+
+  // INIT
+  renderScoreboard();
+  renderMCQ();
+  renderTF();
+  renderEssay();
+</script>
+</body>
+</html>
